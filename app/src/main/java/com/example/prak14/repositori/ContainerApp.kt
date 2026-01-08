@@ -1,8 +1,8 @@
 package com.example.prak14.repositori
 
 import android.app.Application
-import com.example.myfirebase.repositori.FirebaseRepositorySiswa
-import com.example.myfirebase.repositori.RepositorySiswa
+import com.example.myfirebase.repository.FirebaseRepositorySiswa
+import com.example.myfirebase.repository.RepositorySiswa
 import com.google.firebase.Firebase
 
 interface ContainerApp{
