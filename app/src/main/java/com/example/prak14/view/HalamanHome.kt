@@ -49,7 +49,7 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = viewModel(factory = PenyediaViewModel.Factory)
 ) {
-    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
@@ -70,19 +70,18 @@ fun HomeScreen(
                     contentDescription = stringResource(R.string.entry_siswa)
                 )
             }
-        },
+        }
     ) { innerPadding ->
         HomeBody(
             statusUiSiswa = viewModel.statusUiSiswa,
             onSiswaClick = navigateToItemUpdate,
-            retryAction = { viewModel.loadSiswa() },
+            retryAction = viewModel::loadSiswa,
             modifier = modifier
                 .padding(innerPadding)
                 .fillMaxSize()
         )
     }
 }
-
 
 @Composable
 fun HomeBody(
@@ -96,13 +95,12 @@ fun HomeBody(
         modifier = modifier
     ) {
         when (statusUiSiswa) {
-            is StatusUiSiswa.Loading -> OnLoading(modifier = modifier)
-            is StatusUiSiswa.Success -> DaftarSiswaItemView(
-                daftarSiswa = statusUiSiswa.siswa,
-                onSiswaClick = {onSiswaClick(it.id.toInt())},
-                modifier = modifier
+            is StatusUiSiswa.Loading -> LoadingScreen()
+            is StatusUiSiswa.Success -> DataSiswa(
+                itemSiswa = statusUiSiswa.siswa,
+                onSiswaClick = { onSiswaClick(it.id.toInt()) }
             )
-            is StatusUiSiswa.Error -> OnError(
+            is StatusUiSiswa.Error -> ErrorScreen(
                 retryAction,
                 modifier = modifier.fillMaxSize()
             )
@@ -111,7 +109,7 @@ fun HomeBody(
 }
 
 @Composable
-fun OnLoading(modifier: Modifier = Modifier) {
+fun LoadingScreen(modifier: Modifier = Modifier) {
     Image(
         modifier = modifier.size(200.dp),
         painter = painterResource(R.drawable.loading_img),
@@ -120,13 +118,16 @@ fun OnLoading(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun OnError(retryAction: () -> Unit, modifier: Modifier = Modifier) {
+fun ErrorScreen(retryAction: () -> Unit, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = stringResource(R.string.gagal), modifier = Modifier.padding(16.dp))
+        Text(
+            text = stringResource(R.string.gagal),
+            modifier = Modifier.padding(16.dp)
+        )
         Button(onClick = retryAction) {
             Text(stringResource(R.string.retry))
         }
@@ -134,14 +135,14 @@ fun OnError(retryAction: () -> Unit, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun DaftarSiswaItemView(
-    daftarSiswa: List<Siswa>,
+fun DataSiswa(
+    itemSiswa: List<Siswa>,
     onSiswaClick: (Siswa) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(modifier = modifier) {
-        items(items = daftarSiswa, key = { it.id }) { person ->
-            SiswaCard(
+        items(items = itemSiswa, key = { it.id }) { person ->
+            ItemSiswa(
                 siswa = person,
                 modifier = Modifier
                     .padding(dimensionResource(id = R.dimen.padding_small))
@@ -152,7 +153,7 @@ fun DaftarSiswaItemView(
 }
 
 @Composable
-fun SiswaCard(
+fun ItemSiswa(
     siswa: Siswa,
     modifier: Modifier = Modifier
 ) {
@@ -162,7 +163,9 @@ fun SiswaCard(
     ) {
         Column(
             modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_large)),
-            verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding_small))
+            verticalArrangement = Arrangement.spacedBy(
+                dimensionResource(id = R.dimen.padding_small)
+            )
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth()
@@ -174,13 +177,13 @@ fun SiswaCard(
                 Spacer(Modifier.weight(1f))
                 Icon(
                     imageVector = Icons.Default.Phone,
-                    contentDescription = null,
-                )
-                Text(
-                    text = siswa.telpon,
-                    style = MaterialTheme.typography.titleMedium
+                    contentDescription = null
                 )
             }
+            Text(
+                text = siswa.telpon,
+                style = MaterialTheme.typography.titleMedium
+            )
             Text(
                 text = siswa.alamat,
                 style = MaterialTheme.typography.titleMedium
