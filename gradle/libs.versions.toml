@@ -13,6 +13,7 @@ firebase-bom = "33.1.2"
 coroutines-play-services = "1.8.1"
 material3 = "1.4.0"
 ui = "1.10.0"
+lifecycleViewmodelSavedstate = "2.10.0"
 
 
 
@@ -42,6 +43,7 @@ firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "coroutines-play-services" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
 androidx-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "ui" }
+androidx-lifecycle-viewmodel-savedstate = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-savedstate", version.ref = "lifecycleViewmodelSavedstate" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
