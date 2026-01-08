@@ -21,7 +21,6 @@
     <string name="loading">Loading..</string>
     <string name="attention">Perhatian !</string>
     <string name="tanya">Apakah yakin akan menghapus ini ?</string>
-    <string name="deskripsi_no_item">
-        Tidak ada data Siswa. Tap + untuk menambah data
-    </string>
+    <string name="deskripsi_no_item">Tidak ada data Siswa. Tap + untuk menambah data</string>
+    <string name="error">Gagal memuat data. Silakan coba lagi.</string>
 </resources>
