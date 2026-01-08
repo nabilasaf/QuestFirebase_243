@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.myfirebase.repositori.RepositorySiswa
+import com.example.myfirebase.repository.RepositorySiswa
 import com.example.prak14.modeldata.Siswa
 import kotlinx.coroutines.launch
 import java.io.IOException
