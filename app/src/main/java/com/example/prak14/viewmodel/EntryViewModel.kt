@@ -4,7 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.example.myfirebase.repositori.RepositorySiswa
+import com.example.myfirebase.repository.RepositorySiswa
 import com.example.prak14.modeldata.DetailSiswa
 import com.example.prak14.modeldata.UIStateSiswa
 import com.example.prak14.modeldata.toDataSiswa
