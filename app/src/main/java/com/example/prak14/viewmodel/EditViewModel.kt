@@ -1,6 +1,5 @@
 package com.example.prak14.viewmodel
 
-
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -23,35 +22,37 @@ class EditViewModel(
     var uiStateSiswa by mutableStateOf(UIStateSiswa())
         private set
 
-    private val idSiswa: Long =
-        savedStateHandle.get<String>(DestinasiDetail.itemIdArg)?.toLong()
+    // ✅ FIX: ID STRING (BUKAN LONG)
+    private val idSiswa: String =
+        savedStateHandle.get<String>(DestinasiDetail.itemIdArg)
             ?: error("idSiswa tidak ditemukan di SavedStateHandle")
 
     init {
         viewModelScope.launch {
-            uiStateSiswa = repositorySiswa.getSatuSiswa(idSiswa)!!
-                .toUiStateSiswa(true)
+            val siswa = repositorySiswa.getSatuSiswa(idSiswa)
+            if (siswa != null) {
+                uiStateSiswa = siswa.toUiStateSiswa(isEntryValid = true)
+            }
         }
     }
 
     fun updateUiState(detailSiswa: DetailSiswa) {
-        uiStateSiswa =
-            UIStateSiswa(
-                detailSiswa = detailSiswa,
-                isEntryValid = validasiInput(detailSiswa)
-            )
+        uiStateSiswa = UIStateSiswa(
+            detailSiswa = detailSiswa,
+            isEntryValid = validasiInput(detailSiswa)
+        )
     }
 
     private fun validasiInput(
-        uiState: DetailSiswa = uiStateSiswa.detailSiswa
+        detailSiswa: DetailSiswa = uiStateSiswa.detailSiswa
     ): Boolean {
-        return with(uiState) {
-            nama.isNotBlank() && alamat.isNotBlank() && telpon.isNotBlank()
-        }
+        return detailSiswa.nama.isNotBlank()
+                && detailSiswa.alamat.isNotBlank()
+                && detailSiswa.telpon.isNotBlank()
     }
 
     suspend fun editSatuSiswa() {
-        if (validasiInput(uiStateSiswa.detailSiswa)) {
+        if (validasiInput()) {
             try {
                 repositorySiswa.editSatuSiswa(
                     idSiswa,
